@@ -31,12 +31,14 @@ public class PrintingSystem implements ANSI_Colours
     {
         System.out.println
         (
-            ANSI_WHITE + "This is a Printing system that demonstrate the concurrency features in Java such as mutual exclusion, thread handling etc. "
-            + "\nThe system is highlighted with different colours to differentiate the thread activities as follows:" + ANSI_RESET
-            + ANSI_GREEN + "\nLaserPrinter - Thread Monitor class" + ANSI_RESET 
-            + ANSI_YELLOW + "\nStudent threads - 4 instances of student threads" + ANSI_RESET
-            + ANSI_PURPLE + "\nPaper technician thread - 1 instance of this thread" + ANSI_RESET
-            + ANSI_CYAN + "\nToner technician thread - 1 instance of this thread" + ANSI_RESET
+            "******************************************************************************************************************************" 
+            + "\n* " + ANSI_WHITE + "This is a Printing system that demonstrate the concurrency features in Java such as mutual exclusion, thread handling etc. * "
+            + "\n* The system is highlighted with different colours to differentiate the thread activities as follows:                        * " + ANSI_RESET
+            + "\n* " + ANSI_GREEN + "LaserPrinter - Thread Monitor class" + ANSI_RESET + "                                                                                        *"
+            + "\n* " + ANSI_YELLOW + "Student threads - 4 instances of student threads" + ANSI_RESET + "                                                                           *"
+            + "\n* " + ANSI_PURPLE + "Paper technician thread - 1 instance of this thread" + ANSI_RESET + "                                                                        *"
+            + "\n* " + ANSI_CYAN + "Toner technician thread - 1 instance of this thread" + ANSI_RESET + "                                                                        *"
+            + "\n******************************************************************************************************************************"
         );
         
         laserPrinter = new LaserPrinter("LaserPrinter", 5, 9);

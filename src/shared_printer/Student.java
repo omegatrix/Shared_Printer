@@ -82,7 +82,7 @@ public class Student extends Thread implements ANSI_Colours
 
                     try 
                     {
-                        System.out.println(ANSI_YELLOW + "\nNeeds re-filling!!" + ANSI_RESET);
+                        System.out.println(ANSI_WHITE + "\nWaiting for the technicians to refill/replace!!" + ANSI_RESET);
                         Thread.sleep(5000);
                     } 
                     catch (InterruptedException ex) 
