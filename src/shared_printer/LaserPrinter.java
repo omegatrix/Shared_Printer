@@ -60,7 +60,8 @@ public class LaserPrinter implements ServicePrinter, ANSI_Colours
             + ANSI_RESET
         );
 
-        System.out.println(toString());
+        //System.out.println(toString());
+        toString();
     }
     
     public String toString()

@@ -15,6 +15,8 @@ public class PaperTechnician extends Thread implements ANSI_Colours
     private final LaserPrinter laserPrinter;
     private final byte MAX_ATTEMPT;
     
+    private volatile boolean exit;
+    
     public PaperTechnician(String paperTechnicianName, ThreadGroup threadGroup, LaserPrinter laserPrinter) 
     {
         this.paperTechnicianName = paperTechnicianName;
@@ -22,6 +24,7 @@ public class PaperTechnician extends Thread implements ANSI_Colours
         this.printerID = laserPrinter.getPrinterID();
         this.laserPrinter = laserPrinter;
         this.MAX_ATTEMPT = 3;
+        this.exit = false;
         
         System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " thread has started!!" + ANSI_RESET);
     }
@@ -33,9 +36,9 @@ public class PaperTechnician extends Thread implements ANSI_Colours
         
         while(true)
         {   
-            if(!PrintingSystem.studentThreadsAlive())
+            if(exit)
             {
-                System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " thread has ended!!" + ANSI_RESET);
+                System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " thread has terminated!!" + ANSI_RESET);
                 break;
             }
             
@@ -63,6 +66,11 @@ public class PaperTechnician extends Thread implements ANSI_Colours
             
             attemptNo = 0;
         }
+    }
+
+    public void setExit(boolean exit) 
+    {
+        this.exit = exit;
     }
 
     public String getPaperTechnicianName() 
