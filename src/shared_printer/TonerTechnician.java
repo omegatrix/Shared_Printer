@@ -14,8 +14,6 @@ public class TonerTechnician extends Thread implements ANSI_Colours
     private final String printerID;
     private final LaserPrinter laserPrinter;
     private final byte MAX_ATTEMPT;
-    
-    private volatile boolean exit;
 
     public TonerTechnician(String tonerTechnicianName, ThreadGroup threadGroup, LaserPrinter laserPrinter) 
     {
@@ -24,7 +22,6 @@ public class TonerTechnician extends Thread implements ANSI_Colours
         this.printerID = laserPrinter.getPrinterID();
         this.laserPrinter = laserPrinter;
         this.MAX_ATTEMPT = 3;
-        this.exit = false;
         
         System.out.println(ANSI_CYAN + "\nToner technician " + tonerTechnicianName + " thread has started!!" + ANSI_RESET);
     }
@@ -36,9 +33,9 @@ public class TonerTechnician extends Thread implements ANSI_Colours
         
         while(true)
         {
-            if(exit)
+            if(!PrintingSystem.studentThreadsAlive())
             {
-                System.out.println(ANSI_CYAN + "\nToner technician " + tonerTechnicianName + " thread has terminated!!" + ANSI_RESET);
+                System.out.println(ANSI_CYAN + "\nToner technician " + tonerTechnicianName + " thread has ended!!" + ANSI_RESET);
                 break;
             }
             
@@ -66,11 +63,6 @@ public class TonerTechnician extends Thread implements ANSI_Colours
         
             attemptNo = 0;
         }
-    }
-
-    public void setExit(boolean exit) 
-    {
-        this.exit = exit;
     }
 
     public String getTonerTechnicianName() 

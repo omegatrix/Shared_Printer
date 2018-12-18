@@ -49,7 +49,7 @@ public class Student extends Thread implements ANSI_Colours
         {
             if(docList.equals(docListJobComplete))
             {
-                System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " thread has terminated!!" + ANSI_RESET);
+                System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " thread has ended!!" + ANSI_RESET);
                 break;
             }
             

@@ -25,6 +25,7 @@ public class PrintingSystem implements ANSI_Colours
     private final TonerTechnician tonerTechnician;
     
     private static final List<Thread> studentThreadList = new ArrayList();
+    private static boolean studentThreadsAlive = true;
      
     public PrintingSystem()
     {
@@ -84,7 +85,12 @@ public class PrintingSystem implements ANSI_Colours
             }
         });
         
-        paperTechnician.setExit(true);
-        tonerTechnician.setExit(true);
+        studentThreadsAlive = false;
     }
+    
+    public static boolean studentThreadsAlive()
+    {
+        return studentThreadsAlive;
+    }
+
 }
