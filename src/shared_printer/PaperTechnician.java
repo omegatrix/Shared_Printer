@@ -7,62 +7,68 @@ import java.util.logging.Logger;
  *
  * @author Arnold Anthonypillai
  */
-public class PaperTechnician extends Thread implements ANSI_Colours
+public class PaperTechnician extends Thread implements Utility
 {
     private final String paperTechnicianName;
     private final ThreadGroup threadGroup;
     private final String printerID;
     private final LaserPrinter laserPrinter;
-    private final byte MAX_ATTEMPT;
     
     public PaperTechnician(String paperTechnicianName, ThreadGroup threadGroup, LaserPrinter laserPrinter) 
     {
+        super(threadGroup, paperTechnicianName);
+        
         this.paperTechnicianName = paperTechnicianName;
         this.threadGroup = threadGroup;
         this.printerID = laserPrinter.getPrinterID();
         this.laserPrinter = laserPrinter;
-        this.MAX_ATTEMPT = 3;
-        
-        System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " thread has started!!" + ANSI_RESET);
+
+        System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " is in thread state " + String.valueOf(this.getState()) + ANSI_RESET);
     }
     
     @Override
     public void run()
     {   
-        byte attemptNo = 0;
+        System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " is in thread state " + String.valueOf(this.getState()) + ANSI_RESET);
         
-        while(true)
-        {   
-            if(!PrintingSystem.studentThreadsAlive())
+        int attemptNo = 1;
+        int randomNum;
+                 
+        while(attemptNo <= MAX_ATTEMPT)
+        {
+            System.out.println
+            (
+                ANSI_PURPLE + "\nPaper technician " + paperTechnicianName 
+                + " is making the attempt no: " + Integer.toString(attemptNo) + " to re-fill the paper tray"
+                + ANSI_RESET
+            );
+
+            laserPrinter.refillPaper();
+
+            try 
             {
-                System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " thread has ended!!" + ANSI_RESET);
-                break;
+                randomNum = (int)(Math.random() * 10 + 1); //random number from 1 - 10
+
+                System.out.println
+                (
+                    ANSI_PURPLE + "\nPaper technician " + paperTechnicianName 
+                    + " is sleeping " + Integer.toString(randomNum) 
+                    + " seconds after atempt no: " + Integer.toString(attemptNo) + " !!"
+                    + ANSI_RESET
+                );
+
+                Thread.sleep(randomNum * ONE_SECOND);
+            }
+
+            catch (InterruptedException ex) 
+            {
+                Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            while(attemptNo < MAX_ATTEMPT)
-            {
-                synchronized(laserPrinter)
-                {
-                    if(laserPrinter.paperTrayNeedsRefilling())
-                    {
-                        laserPrinter.refillPaper();
-                    }
-                }
-
-                attemptNo ++;
-
-                try 
-                {
-                    Thread.sleep(5000);
-                } 
-                catch (InterruptedException ex) 
-                {
-                    Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            
-            attemptNo = 0;
+            attemptNo ++;
         }
+        
+        System.out.println(ANSI_PURPLE + "\nPaper technician " + paperTechnicianName + " thread is terminating!!" + ANSI_RESET);
     }
 
     public String getPaperTechnicianName() 
@@ -79,10 +85,4 @@ public class PaperTechnician extends Thread implements ANSI_Colours
     {
         return printerID;
     }
-
-    public LaserPrinter getLaserPrinter() 
-    {
-        return laserPrinter;
-    }
-
 }

@@ -9,7 +9,7 @@ import java.util.logging.Logger;
  *
  * @author Arnold Anthonypillai
  */
-public class Student extends Thread implements ANSI_Colours
+public class Student extends Thread implements Utility
 {
     private final String studentName;
     private final ThreadGroup threadGroup;
@@ -19,79 +19,72 @@ public class Student extends Thread implements ANSI_Colours
     
     public Student(String studentName, ThreadGroup threadGroup, LaserPrinter laserPrinter) 
     {
+        super(threadGroup, studentName);
+        
         this.studentName = studentName;
         this.threadGroup = threadGroup;
         this.printerID = laserPrinter.getPrinterID();
         this.laserPrinter = laserPrinter;
         this.docList = new ArrayList<>();
-        
-        System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " thread has started!!" + ANSI_RESET);
+
+        System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " is in thread state " + String.valueOf(this.getState()) + ANSI_RESET);
     }
     
     @Override
     public void run()
     {
+        System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " is in thread state " + String.valueOf(this.getState()) + ANSI_RESET);
+        
         Document cv = new Document(studentName, "Curriculum Vitae", 2);
-        Document cw_1 = new Document(studentName, "Coursework 1", 10);
-        Document article = new Document(studentName, "Article", 17);
-        Document projectPlan = new Document(studentName, "Project Plan", 27);
-        Document yearlyReview = new Document(studentName, "Yearly Review", 34);
+        Document cw_1 = new Document(studentName, "Coursework 1", 7);
+        Document article = new Document(studentName, "Article", 13);
+        Document projectPlan = new Document(studentName, "Project Plan", 16);
+        Document yearlyReview = new Document(studentName, "Yearly Review", 25);
         
         docList.add(cv);
         docList.add(cw_1);
         docList.add(article);
         docList.add(projectPlan);
         docList.add(yearlyReview);
-        
-        List<Document> docListJobComplete = new ArrayList<>();
-    
-        while(true)
-        {
-            if(docList.equals(docListJobComplete))
-            {
-                System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " thread has ended!!" + ANSI_RESET);
-                break;
-            }
+                
+        int randomNum;
             
-            for(int i = 0; i < docList.size(); i++)
+        for(int i = 0; i < docList.size(); i++)
+        {
+            Document currentDoc = docList.get(i);
+
+            System.out.println
+            (   
+                ANSI_YELLOW
+                + "\nStudent " + currentDoc.getUserID() 
+                + " is requesting to print document " + currentDoc.getDocumentName()
+                + " that has " + Integer.toString(currentDoc.getNumberOfPages()) 
+                + " of pages"
+                + ANSI_RESET
+            );
+
+            laserPrinter.printDocument(currentDoc);
+
+            try 
             {
+                randomNum = (int)(Math.random() * 10 + 1); //random number from 1 - 10
+                
                 System.out.println
-                (   
-                    ANSI_YELLOW
-                    + "\nStudent " + docList.get(i).getUserID() 
-                    + " is requesting to print document " + docList.get(i).getDocumentName()
-                    + " that has " + docList.get(i).getNumberOfPages() 
-                    + " of pages"
+                (
+                    ANSI_YELLOW + "\nStudent " + currentDoc.getUserID() 
+                    + " is sleeping " + Integer.toString(randomNum) + " seconds before making another print request!!" 
                     + ANSI_RESET
                 );
                 
-                int numOfPages = docList.get(i).getNumberOfPages();
-                Document currentDoc = docList.get(i);
-                
-                while(true)
-                {
-                    synchronized(laserPrinter)
-                    {
-                        if(laserPrinter.hasEnoughPaper(numOfPages) && laserPrinter.hasEnoughToner(numOfPages))
-                        {
-                            laserPrinter.printDocument(currentDoc);
-                            docListJobComplete.add(currentDoc);
-                            break;
-                        }
-                    }
-
-                    try 
-                    {
-                        System.out.println(ANSI_WHITE + "\nWaiting for the technicians to refill/replace!!" + ANSI_RESET);
-                        Thread.sleep(5000);
-                    } 
-                    catch (InterruptedException ex) 
-                    {
-                        Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                Thread.sleep(randomNum * ONE_SECOND); //sleep for 
+            } 
+            catch (InterruptedException ex) 
+            {
+                Logger.getLogger(Student.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+            
+        System.out.println(ANSI_YELLOW + "\nStudent " + studentName + " thread is terminating!!" + ANSI_RESET);
     }
 
     public String getStudentName() 
@@ -107,11 +100,6 @@ public class Student extends Thread implements ANSI_Colours
     public String getPrinterID() 
     {
         return printerID;
-    }
-
-    public LaserPrinter getLaserPrinter() 
-    {
-        return laserPrinter;
     }
 
     public List<Document> getDocList() 

@@ -4,7 +4,7 @@ package shared_printer;
  *
  * @author Arnold Anthonypillai
  */
-public interface ANSI_Colours 
+public interface Utility 
 {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -16,4 +16,7 @@ public interface ANSI_Colours
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
     
+    public final int MAX_ATTEMPT = 3;
+    public final int ONE_SECOND = 1000;
+    public final int FIVE_SECOND = 5000;
 }
